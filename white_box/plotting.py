@@ -48,6 +48,8 @@ def plot_logit_lens(
 
     if tuned_lens is not None:
         hidden_lps = tuned_lens.transform(stream).map(lambda x: x.log_softmax(dim=-1))
+        #Add final layer output to hidden_lps. This is the same as the normal model output
+        hidden_lps.layers.append(outputs.logits.log_softmax(dim=-1))
     else:
         E = model.get_output_embeddings()
         ln_f = get_final_layer_norm(model.base_model)
